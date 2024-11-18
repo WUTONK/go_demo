@@ -1,0 +1,5 @@
+package jsontest
+
+func main() {
+
+}
