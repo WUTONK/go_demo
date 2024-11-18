@@ -10,8 +10,8 @@ import (
 // 定义接收数据的结构体
 type add_int struct {
 	// 接受样例：`{"a": 12, "b": 18}`
-	add_int_json_a int `json:"a"`
-	add_int_json_b int `json:"b"`
+	add_int_json_a int64 `json:"a"`
+	add_int_json_b int64 `json:"b"`
 }
 
 type add_string struct {
@@ -36,6 +36,7 @@ func main() {
 	r.POST("/add", func(c *gin.Context) {
 		//接受数据的变量
 		json := add_int{}
+
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息

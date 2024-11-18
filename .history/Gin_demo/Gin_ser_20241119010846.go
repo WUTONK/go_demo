@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 
@@ -10,8 +13,8 @@ import (
 // 定义接收数据的结构体
 type add_int struct {
 	// 接受样例：`{"a": 12, "b": 18}`
-	add_int_json_a int `json:"a"`
-	add_int_json_b int `json:"b"`
+	add_int_json_a int64 `json:"a"`
+	add_int_json_b int64 `json:"b"`
 }
 
 type add_string struct {
@@ -36,10 +39,19 @@ func main() {
 	r.POST("/add", func(c *gin.Context) {
 		//接受数据的变量
 		json := add_int{}
+
+		// 读取请求体
+		body, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "无法读取请求体"})
+			return
+		}
+		fmt.Printf("Received JSON: %s\n", body)
+		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body)) // 重新设置请求体
+
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息
-			// gin.H封装了生成json数据的工具
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -60,10 +72,18 @@ func main() {
 	r.POST("/addString", func(c *gin.Context) {
 		json := add_string{}
 
+		// 读取请求体
+		body, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "无法读取请求体"})
+			return
+		}
+		fmt.Printf("Received JSON: %s\n", body)
+		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body)) // 重新设置请求体
+
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息
-			// gin.H封装了生成json数据的工具
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -82,5 +102,4 @@ func main() {
 	})
 
 	r.Run("127.0.0.1:11451")
-
 }

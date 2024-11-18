@@ -10,8 +10,8 @@ import (
 // 定义接收数据的结构体
 type add_int struct {
 	// 接受样例：`{"a": 12, "b": 18}`
-	add_int_json_a int `json:"a"`
-	add_int_json_b int `json:"b"`
+	add_int_json_a int64 `json:"a"`
+	add_int_json_b int64 `json:"b"`
 }
 
 type add_string struct {
@@ -49,17 +49,14 @@ func main() {
 
 		num_sub := num_a + num_b
 
-		c.JSON(200, gin.H{
-			"元数据a": json.add_int_json_a,
-			"元数据b": json.add_int_json_b,
-			"相加结果": num_sub,
-		})
+		c.JSON(200, gin.H{"元数据a": json.add_int_json_a})
+		c.JSON(200, gin.H{"元数据b": json.add_int_json_b})
+		c.JSON(200, gin.H{"相加结果": num_sub})
 
 	})
 
 	r.POST("/addString", func(c *gin.Context) {
-		json := add_string{}
-
+		var json add_string
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息
@@ -74,11 +71,9 @@ func main() {
 
 		string_sum := string_a + string_b
 
-		c.JSON(200, gin.H{
-			"元数据a": json.add_string_json_a,
-			"元数据b": json.add_string_json_b,
-			"相加结果": string_sum,
-		})
+		c.JSON(200, gin.H{"元数据a": json.add_string_json_a})
+		c.JSON(200, gin.H{"元数据b": json.add_string_json_b})
+		c.JSON(200, gin.H{"相加结果": string_sum})
 	})
 
 	r.Run("127.0.0.1:11451")
