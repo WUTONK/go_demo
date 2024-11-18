@@ -50,7 +50,7 @@ func FromJson(data string) Person {
 	Test_Date_Byte := []byte(data)
 	var PersonTest Person //接受解码结果
 	if json.Unmarshal(Test_Date_Byte, &PersonTest) == nil {
-		fmt.Println("json.Unmarshal 解码结果: ", PersonTest)
+		fmt.Println("json.Unmarshal 解码结果: ", PersonTest.Name, PersonTest.Age)
 	}
 
 	return PersonTest
