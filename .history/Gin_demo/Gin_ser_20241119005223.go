@@ -29,7 +29,8 @@ func main() {
 
 	r.GET("/currentTime", func(c *gin.Context) {
 		RFC3339 := "2006-01-02T15:04:05Z07:00" //go中统一使用go诞生时间作为时间模版
-		TimeRes := time.Now().Format(RFC3339)
+		TimeRes := time.Now().Unix()
+		TimeRes = TimeRes.RE
 		c.JSON(200, gin.H{"message": TimeRes})
 	})
 
