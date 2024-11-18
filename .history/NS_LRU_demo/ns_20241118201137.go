@@ -53,7 +53,7 @@ func LRU(ns NS, k int) {
 	// 遍历所有节点
 	for _, node := range ns {
 
-		// 如果节点最后使用时间小于等于seg，则跳过（这意味着节点未到被携带）
+		// 如果节点最后使用时间小于等于seg，则跳过（这意味着节点未被使用）
 		if node.LastUseTime >= seg {
 			continue
 		}
@@ -68,41 +68,5 @@ func LFU(ns NS, k int) {
 }
 
 func FIFO(ns NS, k int) {
-
-	var count []int64 //时间列表
-
-	// 遍历所有节点
-	for _, node := range ns {
-
-		// 如果节点未加载，则跳过
-		if !node.Loaded {
-			continue
-		}
-
-		// 将节点载入时间添加到列表中
-		count = append(count, node.LoadedTime)
-	}
-
-	// 如果载入列表长度小于等于k，则返回（这意味着队列未满，无需卸载）
-	if len(count) <= k {
-		return
-	}
-
-	//对载入顺序进行排序
-	slices.Sort(count)
-
-	// 获取时间列表的最后一个元素
-	seg := count[len(count)-k]
-
-	// 遍历所有节点
-	for _, node := range ns {
-
-		// 如果节点最后使用时间小于等于seg，则跳过（这意味着节点未到卸载点）
-		if node.LastUseTime <= seg {
-			continue
-		}
-		// 卸载节点
-		node.Unload()
-	}
 
 }
