@@ -22,9 +22,9 @@ func main() {
 }
 
 const (
-	TEST_DATA      = `{"name": "John", "age": 30, "city": "New York"}`
-	TEST_DATA2     = `{"name": "Person", "age": -328}`
-	To_JSON_PERSON = `{}` // 接受 json
+	TEST_DATA    = `{"name": "John", "age": 30, "city": "New York"}`
+	TEST_DATA2   = `{"name": "Person", "age": -328}`
+	ToJsonPerson = `{}`
 )
 
 type Person struct {
