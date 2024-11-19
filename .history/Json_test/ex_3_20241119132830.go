@@ -7,14 +7,14 @@ import (
 
 func main() {
 
-	PersonMe := &Person{
+	P_ME := &Person{
 		Name: "WUTONK",
 		Age:  18,
 		City: "Canton",
 	}
 
-	PMeJson := PersonMe.ToJson()
-	fmt.Println("序列化完成：", PMeJson)
+	PMeString := P_ME.ToJson()
+	fmt.Println("序列化完成：", PMeString)
 
 	PersonTest := FromJson(TEST_DATA)
 	fmt.Println("json.Unmarshal 解码结果: ", PersonTest)
@@ -33,20 +33,20 @@ type Person struct {
 	City string
 }
 
-// 序列化为Json
+// 转为Json
 func (p *Person) ToJson() string {
 
-	ToJsonPerson, err := json.Marshal(&p)
+	TestPJson, err := json.Marshal(&p)
 
 	if err != nil {
 		fmt.Println("序列化出错,错误原因: ", err)
 		return ""
 	}
 
-	return string(ToJsonPerson)
+	return string(TestPJson)
 }
 
-// 从json反序列化
+// 从json解码
 func FromJson(data string) Person {
 	// Your code here
 

@@ -7,13 +7,13 @@ import (
 
 func main() {
 
-	PersonMe := &Person{
+	P_me := &Person{
 		Name: "WUTONK",
 		Age:  18,
 		City: "Canton",
 	}
 
-	PMeJson := PersonMe.ToJson()
+	PMeJson := P_me.ToJson()
 	fmt.Println("序列化完成：", PMeJson)
 
 	PersonTest := FromJson(TEST_DATA)
