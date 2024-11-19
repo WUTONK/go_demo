@@ -28,7 +28,7 @@ const (
 
 type Person struct {
 	// Your code here
-	Name string `json:"Name"`
+	Name string `json:"Naaame"`
 	Age  int64  `json:"Age"`
 	City string `json:"City"`
 }

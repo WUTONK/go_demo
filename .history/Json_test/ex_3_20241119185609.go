@@ -28,15 +28,17 @@ const (
 
 type Person struct {
 	// Your code here
-	Name string `json:"Name"`
-	Age  int64  `json:"Age"`
-	City string `json:"City"`
+	Name string
+	Age  int64
+	City string
 }
 
 // 序列化为Json
 func (p *Person) ToJson() string {
 
-	personToString, err := json.Marshal(&p)
+	personJsonTag := p
+
+	personToString, err := json.Marshal(personJsonTag)
 	if err != nil {
 		fmt.Println("序列化出错,错误原因: ", err)
 		return ""
