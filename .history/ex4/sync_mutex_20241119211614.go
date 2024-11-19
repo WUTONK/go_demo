@@ -25,12 +25,13 @@ func (c *MutexCounter) Add(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func (c *MutexCounter) Get() int {
+func (c *MutexCounter) Get(wg *sync.WaitGroup) int {
 	c.lck.Lock()
 	defer c.lck.Unlock()
 
 	ref := c.count
 	fmt.Println("mutexCounter", ref, "readtime:", time.Now().UnixNano())
+	wg.Done()
 	return ref
 
 }
@@ -72,13 +73,16 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(3)
 
+	//并发 3 个 get
+	go mutexCounterTest.Get(&wg)
+	go mutexCounterTest.Get(&wg)
+	go mutexCounterTest.Get(&wg)
+
 	//并发 3 个 add
 	go mutexCounterTest.Add(&wg)
 	go mutexCounterTest.Add(&wg)
 	go mutexCounterTest.Add(&wg)
 
 	wg.Wait()
-	// 读取结果
-	println("count:", mutexCounterTest.Get())
 
 }

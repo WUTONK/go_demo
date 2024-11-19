@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const (
+	RFC3339 = "2006-01-02T15:04:05Z07:00"
+)
+
 // 互斥锁
 type MutexCounter struct {
 	lck   sync.Mutex
@@ -20,7 +24,7 @@ func (c *MutexCounter) Add(wg *sync.WaitGroup) {
 	for i := 0; i < 10000; i++ {
 		c.count += 1
 	}
-	println("addtime:", time.Now().UnixNano())
+	println("addtime:", time.Now().Format(RFC3339))
 
 	wg.Done()
 }
@@ -28,11 +32,9 @@ func (c *MutexCounter) Add(wg *sync.WaitGroup) {
 func (c *MutexCounter) Get() int {
 	c.lck.Lock()
 	defer c.lck.Unlock()
-
 	ref := c.count
-	fmt.Println("mutexCounter", ref, "readtime:", time.Now().UnixNano())
+	println("readtime:", time.Now().Format(RFC3339))
 	return ref
-
 }
 
 // 读写锁
@@ -47,7 +49,7 @@ func (c *RWMutesCounter) Add(wg *sync.WaitGroup, text string) {
 	c.lck.Lock()
 	defer c.lck.Unlock()
 	c.text = text
-	println("write_time:", time.Now().UnixNano())
+	println("write_time:", time.Now().Format(RFC3339))
 	wg.Done()
 }
 
@@ -58,7 +60,7 @@ func (c *RWMutesCounter) Get(wg *sync.WaitGroup) int {
 	wg.Done()
 
 	ref := c.count
-	println("struct_text:", c.text, "readtime:", time.Now().UnixNano())
+	println("struct_text:", c.text, "readtime:", time.Now().Format(RFC3339))
 	return ref
 }
 
@@ -70,15 +72,19 @@ func main() {
 
 	// 协程池
 	var wg sync.WaitGroup
-	wg.Add(3)
-
+	wg.Add(6)
 	//并发 3 个 add
 	go mutexCounterTest.Add(&wg)
 	go mutexCounterTest.Add(&wg)
 	go mutexCounterTest.Add(&wg)
-
+	//并发 3 个 get
+	go fmt.Println("mutexCounterTest:", mutexCounterTest.Get())
+	go fmt.Println("mutexCounterTest:", mutexCounterTest.Get())
+	go fmt.Println("mutexCounterTest:", mutexCounterTest.Get())
 	wg.Wait()
-	// 读取结果
-	println("count:", mutexCounterTest.Get())
+	//输出结果
+
+	//并发 3 个 读
+	wg.Add(3)
 
 }

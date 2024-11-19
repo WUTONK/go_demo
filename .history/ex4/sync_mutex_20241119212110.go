@@ -25,12 +25,13 @@ func (c *MutexCounter) Add(wg *sync.WaitGroup) {
 	wg.Done()
 }
 
-func (c *MutexCounter) Get() int {
+func (c *MutexCounter) Get(wg *sync.WaitGroup) int {
 	c.lck.Lock()
 	defer c.lck.Unlock()
 
 	ref := c.count
 	fmt.Println("mutexCounter", ref, "readtime:", time.Now().UnixNano())
+	wg.Done()
 	return ref
 
 }
