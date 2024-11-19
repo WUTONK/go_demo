@@ -9,13 +9,13 @@ import (
 )
 
 // 定义接收数据的结构体
-type AddInt struct {
+type add_int struct {
 	// 接受样例：`{"a": 12, "b": 18}`
 	A_INT int `json:"a"`
 	B_INT int `json:"b"`
 }
 
-type AddString struct {
+type add_string struct {
 	// 接受样例：`{ "a": "12", "b": "18" }`
 	A_STR string `json:"a"`
 	B_STR string `json:"b"`
@@ -29,14 +29,14 @@ func main() {
 	})
 
 	r.GET("/currentTime", func(c *gin.Context) {
-		rfc3339 := "2006-01-02T15:04:05Z07:00" //go中统一使用go诞生时间作为时间模版
-		timeRes := time.Now().Format(rfc3339)
+		RFC3339 := "2006-01-02T15:04:05Z07:00" //go中统一使用go诞生时间作为时间模版
+		timeRes := time.Now().Format(RFC3339)
 		c.String(http.StatusOK, timeRes)
 	})
 
 	r.POST("/add", func(c *gin.Context) {
 		//接受数据的变量
-		json := AddInt{}
+		json := add_int{}
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息
@@ -45,14 +45,14 @@ func main() {
 			return
 		}
 
-		numSum := json.A_INT + json.B_INT
+		NumSum := json.A_INT + json.B_INT
 
-		c.JSON(200, gin.H{"sum": numSum})
+		c.JSON(200, gin.H{"sum": NumSum})
 
 	})
 
 	r.POST("/addString", func(c *gin.Context) {
-		json := AddString{}
+		json := add_string{}
 
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
