@@ -31,7 +31,7 @@ func main() {
 	r.GET("/currentTime", func(c *gin.Context) {
 		RFC3339 := "2006-01-02T15:04:05Z07:00" //go中统一使用go诞生时间作为时间模版
 		TimeRes := time.Now().Format(RFC3339)
-		c.String(http.StatusOK, TimeRes)
+		c.JSON(200, gin.H{"message": TimeRes})
 	})
 
 	r.POST("/add", func(c *gin.Context) {
@@ -45,9 +45,13 @@ func main() {
 			return
 		}
 
-		NumSum := json.A_INT + json.B_INT
+		NumSub := json.A_INT + json.B_INT
 
-		c.JSON(200, gin.H{"sum": NumSum})
+		c.JSON(200, gin.H{
+			"元数据a": json.A_INT,
+			"元数据b": json.B_INT,
+			"相加结果": NumSub,
+		})
 
 	})
 
@@ -62,20 +66,21 @@ func main() {
 		}
 
 		//接受参数
-		NumA, err := strconv.Atoi(json.A_STR)
-		if err != nil {
-			println("转码错误:", err)
-		}
-		NumB, err := strconv.Atoi(json.B_STR)
-		if err != nil {
-			println("转码错误:", err)
+		if NumA, err := strconv.Atoi(json.A_STR); err != nil {
+			println("err:", err)
 		}
 
-		StringSum := NumA + NumB
+		NumB := json.B_STR
 
-		c.JSON(200, gin.H{"sum": StringSum})
+		Sum := NumA + NumB
+
+		c.JSON(200, gin.H{
+			"元数据a": json.A_STR,
+			"元数据b": json.B_STR,
+			"相加结果": Sum,
+		})
 	})
 
-	r.Run("127.0.0.1:1145")
+	r.Run("127.0.0.1:11451")
 
 }

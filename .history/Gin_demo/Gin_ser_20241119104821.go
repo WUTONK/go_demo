@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +30,7 @@ func main() {
 	r.GET("/currentTime", func(c *gin.Context) {
 		RFC3339 := "2006-01-02T15:04:05Z07:00" //go中统一使用go诞生时间作为时间模版
 		TimeRes := time.Now().Format(RFC3339)
-		c.String(http.StatusOK, TimeRes)
+		c.JSON(200, gin.H{"message": TimeRes})
 	})
 
 	r.POST("/add", func(c *gin.Context) {
@@ -45,9 +44,16 @@ func main() {
 			return
 		}
 
-		NumSum := json.A_INT + json.B_INT
+		num_a := json.add_int_json_a
+		num_b := json.add_int_json_b
 
-		c.JSON(200, gin.H{"sum": NumSum})
+		num_sub := num_a + num_b
+
+		c.JSON(200, gin.H{
+			"元数据a": json.add_int_json_a,
+			"元数据b": json.add_int_json_b,
+			"相加结果": num_sub,
+		})
 
 	})
 
@@ -57,25 +63,24 @@ func main() {
 		//将request的body中的数据，自动按照json格式解析到结构体
 		if err := c.BindJSON(&json); err != nil {
 			// 返回错误信息
+			// gin.H封装了生成json数据的工具
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		//接受参数
-		NumA, err := strconv.Atoi(json.A_STR)
-		if err != nil {
-			println("转码错误:", err)
-		}
-		NumB, err := strconv.Atoi(json.B_STR)
-		if err != nil {
-			println("转码错误:", err)
-		}
+		string_a := json.A_String
+		string_b := json.B_String
 
-		StringSum := NumA + NumB
+		String_Sum := string_a + string_b
 
-		c.JSON(200, gin.H{"sum": StringSum})
+		c.JSON(200, gin.H{
+			"元数据a": json.A_String,
+			"元数据b": json.B_String,
+			"相加结果": String_Sum,
+		})
 	})
 
-	r.Run("127.0.0.1:1145")
+	r.Run("127.0.0.1:11451")
 
 }
